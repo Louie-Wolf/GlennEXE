@@ -1,20 +1,23 @@
 import sys, os, datetime
 
 #version
-version = 1.2
-vdate = '23-08-2023'
+version = '1.2.1'
+vdate = '29-08-2023'
 
 # get path name
+projectStructureFolderName = '2023-08-29_Template-NEW'
 pathname = os.path.dirname(sys.argv[0])
 fullpathname = os.path.abspath(pathname)
 
 # define pathnames
-finalDirectory = fullpathname + '\\!_Final'
-draftDirectory = fullpathname + '\\1_Draft'
-rawFootageVideosDirectory = fullpathname + '\\2_Raw-Footage\Videos'
-projectFilesDirectory = fullpathname + '\\3_Project-Files'
-musicDirectory = fullpathname + '\\4_Music'
-graphicsDirectory = fullpathname + '\\5_Graphics'
+projectStructureFolderDir = fullpathname + f'\\{projectStructureFolderName}'
+finalDirectory = fullpathname + f'\\{projectStructureFolderName}' + '\\!_Final'
+draftDirectory = fullpathname + f'\\{projectStructureFolderName}' + '\\1_Draft'
+rawFootageVideosDirectory = fullpathname + f'\\{projectStructureFolderName}' + '\\2_Raw-Footage\Videos'
+projectFilesDirectory = fullpathname + f'\\{projectStructureFolderName}' + '\\3_Project-Files'
+musicDirectory = fullpathname + f'\\{projectStructureFolderName}' + '\\4_Music'
+graphicsDirectory = fullpathname + f'\\{projectStructureFolderName}' + '\\5_Graphics'
+mainFolderFile = fullpathname + f'\\{projectStructureFolderName}' + '\\YYYY-MM-DD_Template'
 
 #!_final:         YYYY-MM-DD_Project-Title_FINAL-CUT
 #1_draft:         YYYY-MM-DD_Project-Title_RAW-CUT-V1,V2,etc...
@@ -28,11 +31,15 @@ unconfirmedAnswer = True
 invalidTodaysDateAnswer = True
 invalidConfirmedDataAnswer = True
 invalidDateAnswer = True
+invalidCustomerAnswer = True
 
 # date
 year = 'wrong input'
 month = 'wrong input'
 day = 'wrong input'
+
+# company
+customer_name = "wrong input"
 
 # nameexception
 nameExceptionList = ['Adobe Premiere Pro Auto-Save']
@@ -81,7 +88,6 @@ while(unconfirmedAnswer):
 
                 # break out of while loop
                 invalidDateAnswer = False
-
         else:
             print("Wrong Input! Please enter: \"y\" for yes, or \"n\" for no...")
             continue
@@ -93,11 +99,15 @@ while(unconfirmedAnswer):
         if int(day) < 10:
             day = '0' + str(int(day))
 
+    # get customer name from input
+    print("Please enter the customers name: (Ex. Pirelli)")
+    customer_name = input()
+
     # get project name from input
     print("Insert project title: (Ex. Winter-Tech-Days)")
     projectTitle = input()
 
-    print(f'\n Date: {year}-{month}-{day} \n Title: {projectTitle} \n')
+    print(f'\n Date: {year}-{month}-{day} \n Customer: {customer_name} \n Title: {projectTitle} \n')
     print("Do you want to rename the files with this data? (y/n)")
 
     while(invalidConfirmedDataAnswer):
@@ -115,6 +125,11 @@ while(unconfirmedAnswer):
             break
         else:
             print("Wrong Input! Please enter: \"y\" for yes, or \"n\" for no...")
+
+#rename method for main folder name
+def renameMainFolder(year, month, day, customer_name, title):
+    new_name = f'{year}-{month}-{day}_{customer_name}_{title}'
+    os.rename(projectStructureFolderDir, new_name)
 
 
 #rename method for date, project title counted
@@ -138,7 +153,6 @@ def renameFilesDate(year, month, day):
         newName = f'{year}-{month}-{day}_{file}'
         os.rename(file, newName)
 
-# Change to own dir
 os.chdir(finalDirectory)
 renameFilesDateTitle(year, month, day, projectTitle)
 
@@ -156,6 +170,9 @@ renameFilesDateTitle(year, month, day, projectTitle)
 
 os.chdir(graphicsDirectory)
 renameFilesDateTitle(year, month, day, projectTitle)
+
+os.chdir(fullpathname)
+renameMainFolder(year, month, day, customer_name, projectTitle)
 
 print("Success!")
 print("Press enter to close the program...")

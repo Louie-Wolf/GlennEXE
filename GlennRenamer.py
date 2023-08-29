@@ -1,6 +1,4 @@
-from re import M
 import sys, os, datetime
-from tkinter import N, Y
 
 #version
 version = 1.2
@@ -44,7 +42,7 @@ print("Setting up Project...")
 
 while(unconfirmedAnswer):
     while (invalidTodaysDateAnswer):
-        print("Do you want to use todays date? y/n")
+        print("Do you want to use todays date? (y/n)")
         answer = str(input().lower())
 
         if answer == 'y' or answer == 'yes':
@@ -100,7 +98,7 @@ while(unconfirmedAnswer):
     projectTitle = input()
 
     print(f'\n Date: {year}-{month}-{day} \n Title: {projectTitle} \n')
-    print("Do you want to rename the files with this data? (Y/N)")
+    print("Do you want to rename the files with this data? (y/n)")
 
     while(invalidConfirmedDataAnswer):
         renameFilesAnswer = str(input()).lower()
@@ -109,11 +107,13 @@ while(unconfirmedAnswer):
             unconfirmedAnswer = False
             print("Input Confirmed! Renaming data...")
         elif renameFilesAnswer == 'n' or renameFilesAnswer == 'no':
-            invalidConfirmedDataAnswer = False
             unconfirmedAnswer = True
-            print("Restarting programm...")
-        else:
+            invalidTodaysDateAnswer = True
             invalidConfirmedDataAnswer = True
+            invalidDateAnswer = True
+            print("Restarting programm...")
+            break
+        else:
             print("Wrong Input! Please enter: \"y\" for yes, or \"n\" for no...")
 
 
